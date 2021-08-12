@@ -1,13 +1,17 @@
-package com.example.SpringBootPractice.service.posts;
+package com.example.SpringBootPractice.domain.posts.service;
 
 import com.example.SpringBootPractice.domain.posts.Posts;
 import com.example.SpringBootPractice.domain.posts.PostsRepository;
+import com.example.SpringBootPractice.web.dto.PostsListResponseDto;
 import com.example.SpringBootPractice.web.dto.PostsResponseDto;
 import com.example.SpringBootPractice.web.dto.PostsSaveRequestDto;
 import com.example.SpringBootPractice.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -39,5 +43,19 @@ public class PostsService {
         posts.update(requestDto.getTitle(), requestDto.getContent());
 
         return id;
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAllDesc(){
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void delete (Long id){
+        Posts posts = postsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id ="+id));
+
+        postsRepository.delete(posts);
     }
 }

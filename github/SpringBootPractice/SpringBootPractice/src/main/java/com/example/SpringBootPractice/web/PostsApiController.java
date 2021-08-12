@@ -1,6 +1,6 @@
 package com.example.SpringBootPractice.web;
 
-import com.example.SpringBootPractice.service.posts.PostsService;
+import com.example.SpringBootPractice.domain.posts.service.PostsService;
 import com.example.SpringBootPractice.web.dto.PostsResponseDto;
 import com.example.SpringBootPractice.web.dto.PostsSaveRequestDto;
 import com.example.SpringBootPractice.web.dto.PostsUpdateRequestDto;
@@ -29,5 +29,11 @@ public class PostsApiController {
     public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto)
     {
         return postsService.update(id,requestDto);
+    }
+
+    @DeleteMapping("/api/v1/posts/{id}")
+    public Long delete(@PathVariable Long id){
+        postsService.delete(id);
+        return id;
     }
 }
